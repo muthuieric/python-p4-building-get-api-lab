@@ -20,37 +20,16 @@ def index():
 
 @app.route('/bakeries')
 def bakeries():
-    bakeries = Bakery.query.all()
 
-    bakery_list = []
-    for bakery in bakeries:
-        bakery_dict = {
-            "id": bakery.id,
-            "created_at": bakery.created_at, 
-            "name": bakery.name,
-            "updated_at": bakery.updated_at,  
-            "baked_goods": [
-                {
-                    "bakery_id": bg.id,
-                    "created_at": bg.created_at,  
-                    "id": bg.id,
-                    "name": bg.name,
-                    "price": bg.price,
-                    "updated_at": bg.updated_at,  
-                }
-                for bg in bakery.baked_goods
-            ],
-        }
-        bakery_list.append(bakery_dict)
+    bakeries = Bakery.query.all()
+    bakeries_serialized = [bakery.to_dict() for bakery in bakeries]
 
     response = make_response(
-        jsonify(bakery_list),
+        bakeries_serialized,
         200
     )
-    response.headers["Content-Type"] = "application/json"
-
     return response
-
+   
 
 @app.route('/bakeries/<int:id>')
 def bakery_by_id(id):
@@ -111,3 +90,34 @@ if __name__ == '__main__':
 
 
 
+
+ # bakeries = Bakery.query.all()
+
+    # bakery_list = []
+    # for bakery in bakeries:
+    #     bakery_dict = {
+    #         "id": bakery.id,
+    #         "created_at": bakery.created_at, 
+    #         "name": bakery.name,
+    #         "updated_at": bakery.updated_at,  
+    #         "baked_goods": [
+    #             {
+    #                 "bakery_id": bg.id,
+    #                 "created_at": bg.created_at,  
+    #                 "id": bg.id,
+    #                 "name": bg.name,
+    #                 "price": bg.price,
+    #                 "updated_at": bg.updated_at,  
+    #             }
+    #             for bg in bakery.baked_goods
+    #         ],
+    #     }
+    #     bakery_list.append(bakery_dict)
+
+    # response = make_response(
+    #     jsonify(bakery_list),
+    #     200
+    # )
+    # response.headers["Content-Type"] = "application/json"
+
+    # return response
